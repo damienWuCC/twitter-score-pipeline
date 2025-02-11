@@ -4,20 +4,17 @@ import sqlite3
 from following import build_secondary_kol_list, load_kol_screen_names
 from tweets import build_relationship_graph
 
-# 1. 准备一个500 KOL list的核心账号列表
 def load_kol_list(file_path):
     spark = SparkSession.builder.appName("KOLPipeline").getOrCreate()
     kol_df = spark.read.csv(file_path, header=True)
     kol_list = kol_df.select("ScreenName", "rest_id").rdd.map(lambda row: {'screen_name': row['ScreenName'], 'rest_id': row['rest_id']}).collect()
     return kol_list
 
-# 5. 计算各个节点的加权得分然后入库
 def calculate_weighted_scores(graph):
     scores = nx.pagerank(graph)
     return scores
 
 def save_scores_to_db(scores, db_connection):
-    # 假设有一个数据库连接对象
     for username, score in scores.items():
         db_connection.execute("INSERT INTO scores (username, score) VALUES (?, ?)", (username, score))
 
