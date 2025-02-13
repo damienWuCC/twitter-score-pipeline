@@ -1,7 +1,8 @@
 from pyspark.sql import SparkSession
 import networkx as nx
 import sqlite3
-from following import build_secondary_kol_list, build_secondary_kol_ids_list
+from following import build_secondary_kol_list, build_secondary_kol_ids_list, merge_secondary_kol_lists
+from count import analyze_following_distribution, get_filtered_following_list
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -34,7 +35,7 @@ def main():
     kol_list = load_kol_list('./user_data.csv')
     kol_ids = set([row['id'] for row in kol_list])
     logging.info("kol ids", kol_ids)
-    secondary_kol_list = build_secondary_kol_list()
+    merge_secondary_kol_lists()
 
 if __name__ == "__main__":
     main()
