@@ -2,9 +2,15 @@ import http.client
 import json
 import time
 import logging
+import os
+from dotenv import load_dotenv
 
-API_KEY = "607ddaa1c8msh9ba5d3b7be3ae25p16fa5bjsn104b94399bdb"
-API_HOST = "twitter241.p.rapidapi.com"
+# 加载环境变量
+load_dotenv()
+
+# 从环境变量获取配置
+API_KEY = os.getenv('TWITTER_API_KEY')
+API_HOST = os.getenv('TWITTER_API_HOST')
 MAX_RETRIES = 3
 RETRY_DELAY = 5
 
